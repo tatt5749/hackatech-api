@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\FixedController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,8 +21,27 @@ Route::prefix('auth')->group(function () {
 });
     
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('fixed')->group(function () {
+        
+        Route::get('/overview', [FixedController::class, 'overview']);
+        Route::get('/overview/stake', [FixedController::class, 'stakeOverview']);
+        Route::get('/overview/personal', [FixedController::class, 'personalOverview']);
+        Route::get('/stakes', [FixedController::class, 'getStakes']);
+        Route::get('/transaction/status', [FixedController::class, 'getTransactionStatus']);
+        Route::get('/approveStake', [FixedController::class, 'approveStakeStatus']);
+        Route::get('/approveClaim', [FixedController::class, 'approveClaimStatus']);
+        
+        Route::put('/approveStake', [FixedController::class, 'approveStake']);
+        Route::put('/approveClaim', [FixedController::class, 'approveClaim']);
+        Route::put('/claim', [FixedController::class, 'claim']);
+        Route::post('/stake', [FixedController::class, 'stake']);
+        Route::post('/unstake', [FixedController::class, 'unstake']);
+        
+        Route::put('/setupWallet', [FixedController::class, 'setupWallet']);
+        Route::post('/send', [FixedController::class, 'send']);
+    });
 });
+
 
 
